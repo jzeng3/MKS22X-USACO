@@ -2,9 +2,14 @@ import java.util.*;
 import java.io.*;
 public class USACO{
   public static void main(String[] args){
-    bronze(makelake.1.in);
+    try{
+      bronze("makelake.1.in");
+    }
+    catch (FileNotFoundException e){
+      System.out.println("file not found");
+    }
   }
-    public static int bronze(String filename){
+    public static int bronze(String filename) throws FileNotFoundException{
       File file = new File(filename);
       Scanner input = new Scanner(file);
       int line = 1;
@@ -12,25 +17,25 @@ public class USACO{
       int C = 0;
       int E = 0;
       int N = 0;
-      while (file.hasNextLine){
-        str readLine = "";
-        if (line == 1){
-          readLine += file.nextLine();
-          int spaces = 0;
-          String rowString = "";
-          String colString = "";
-          for (int i = 0; i < readLine.length(); i++){
-            if (readLine.charAt(i) == ' '){
-              spaces++;
-            }
-            else if (spaces == 0){
-              rowString += readLine.substring(i,i+1);
-            }
-            else if (spaces == 1){
-              colString += readLine.substring(i,i+1);
-            }
+      String readLine = "";
+      while (input.hasNextLine()){
+          if (line == 0){
+          readLine = input.nextLine();
+          //System.out.println(readLine.toCharArray());
+          String[] numbers = readLine.split(" ");
+          R = numbers[0];
+          C = numbers[1];
+          E = numbers[2];
+          N = numbers[3];
+          for (int i = 0; i < numbers.length; i++){
+          System.out.println(numbers[i] + ", ");
+          line++;
           }
+
+
+
         }
+
       }
 	return 0;
     }

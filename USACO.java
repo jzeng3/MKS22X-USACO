@@ -3,66 +3,75 @@ import java.io.*;
 public class USACO{
 
   public static void main(String[] args){
+    // try every test case, catch if file is invalid
     try{
+      System.out.println(bronze("testCases/makelake.1.in"));
       System.out.println(bronze("testCases/makelake.2.in"));
-    //  bronze("testCases/makelake.2.in");
-    //  bronze("testCases/makelake.3.in");
+      System.out.println(bronze("testCases/makelake.3.in"));
+      System.out.println(bronze("testCases/makelake.4.in"));
+      System.out.println(bronze("testCases/makelake.5.in"));
     }
     catch (FileNotFoundException e){
-      System.out.println("file not found");
+      System.out.println("File not found");
     }
   }
 
   public static int bronze(String filename) throws FileNotFoundException{
+    // make new lake and return volume
     Lake test = new Lake(filename);
-    System.out.println(test);
     return test.volume();
   }
+
   public static int silver(String filename){
     return 0;
   }
 }
+
 class Lake{
 
   private int R;
   private int C;
   private int E;
   private int N;
-  private int[][] pasture;
-  private int[] cowHerd;
+  private int[][] pasture; // 2D array with pasture depths
+  private int[] cowHerd; // 9-squares to be stomped on
 
   public Lake(String filename) throws FileNotFoundException{
+    // read input file
     File file = new File(filename);
     Scanner input = new Scanner(file);
     String readLine = "";
     int line = 0;
     while (input.hasNextLine()){
       readLine = input.nextLine();
-      String[] numbers = readLine.split(" ");
-      /* read the first line of information for
-      number of rows, columns, final elevation, and
-      number of instructions*/
+      // separate the line into String array of the "numberStr" to be used
+      String[] numberStr = readLine.split(" ");
+      /* Read the first line of information for
+      number of rows, columns, final elevation, and number of instructions*/
       if (line == 0){
-        R = Integer.parseInt(numbers[0]);
-        C = Integer.parseInt(numbers[1]);
-        E = Integer.parseInt(numbers[2]);
-        N = Integer.parseInt(numbers[3]);
+        R = Integer.parseInt(numberStr[0]);
+        C = Integer.parseInt(numberStr[1]);
+        E = Integer.parseInt(numberStr[2]);
+        N = Integer.parseInt(numberStr[3]);
         pasture = new int[R][C];
-        System.out.println(R + " " + C+" "+E+ " "+N);
-      }else if (line <= R){
 
+      }
+      // When reading the lines with the pasture
+      else if (line <= R){
+        // update current  pasture row
         int r = line - 1;
         for (int i = 0; i < pasture[0].length; i++){
-
-          pasture[r][i] = Integer.parseInt(numbers[i]);
-
+          pasture[r][i] = Integer.parseInt(numberStr[i]);
         }
 
 
-      }else if (line > R){
-        int R_s = Integer.parseInt(numbers[0]);
-        int C_s = Integer.parseInt(numbers[1]);
-        int D_s = Integer.parseInt(numbers[2]);
+      }
+      // When reading the instructions
+      else if (line > R && (line - R) <= N){
+        // call herd to stomp where specified
+        int R_s = Integer.parseInt(numberStr[0]);
+        int C_s = Integer.parseInt(numberStr[1]);
+        int D_s = Integer.parseInt(numberStr[2]);
         stomp(R_s, C_s, D_s);
       }
       line++;
@@ -71,6 +80,7 @@ class Lake{
 
   }
 
+  // for printing pasture
   public String toString(){
     String pastureStr = "";
     for (int r = 0; r < R; r++){
@@ -83,7 +93,7 @@ class Lake{
     }
     return pastureStr;
   }
-
+  // stomp on a 9-square space on the pasture given specified row, column, and depth to stomp down
   public void stomp(int R_s, int C_s, int D_s){
     cowHerd = new int[9];
     int index = 0;
@@ -95,17 +105,20 @@ class Lake{
         cowHerd[index+2] = pasture[i][C_s+1];
         index += 3;
       }
-
+      // sort the array of elevations and store the highest elevation
       Arrays.sort(cowHerd);
       int highestElev = cowHerd[8];
-      int diff = 0;
 
+      int diff = 0;
       // update the pasture levels
       for (int i = R_s -1; i < R_s+2; i++){
+        /* If the difference between elevations of current spot and highest spot
+          is less than or equal to the number of inches to push down,
+          subtract the elevation of the current spot by the difference between
+          the number of inches to push down and the difference between elevations.
+        */
         diff = highestElev - pasture[i][C_s-1];
         if (diff <= D_s){
-          int start = D_s - diff;
-
           pasture[i][C_s-1] -= (D_s - diff);
         }
         diff = highestElev - pasture[i][C_s];
@@ -120,21 +133,18 @@ class Lake{
       }
     }
   }
-
+// Find the volume of the lake
   public int volume(){
     int totalDepth = 0;
     for (int r = 0; r < R; r++){
       for (int c = 0; c < C; c++){
+        // If the pasture is under the water, add the depth to total depth
         if ( (E - pasture[r][c]) > 0){
           totalDepth += (E - pasture[r][c]);
         }
       }
     }
-    System.out.println("total Depth: "+ totalDepth);
-    int length = R * 6 * 12;
-    System.out.println("L: "+ length);
-    int width = C * 6* 12;
-    System.out.println("W: "+ width);
+    // Multiply depth by 6 feet by 6 feet to get volume
     int volume = totalDepth * 72 * 72;
     return volume;
   }

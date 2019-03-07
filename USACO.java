@@ -6,6 +6,7 @@ public class USACO{
   private int E;
   private int N;
   private int[][] pasture;
+  private ArrayList<Cow> cowHerd;
 
   public static void main(String[] args){
     try{
@@ -17,10 +18,16 @@ public class USACO{
   }
 
     public static int bronze(String filename) throws FileNotFoundException{
+      public makelake(filename);
+      stomp(1,1,4);
+	return 0;
+    }
+
+    public int makelake(String filename) throws FileNotFoundException{
       File file = new File(filename);
       Scanner input = new Scanner(file);
       String readLine = "";
-      line = 0;
+      int line = 0;
       while (input.hasNextLine()){
           readLine = input.nextLine();
           String[] numbers = readLine.split(" ");
@@ -46,17 +53,22 @@ public class USACO{
         line++;
 
       }
-	return 0;
+      return 0;
     }
 
     public void stomp(int R_s, int C_s, int D_s){
+      cowHerd = new ArrayList<Cow>();
 
       if (1 <= R_s && R_s <= R-2 && 1 <= C_s && C_s <= C-2){
         for (int i = R_s; i < R_s+2; i++){
-
+          cowHerd.add(new Cow(i, C_s, pasture[i][C_s]));
+          cowHerd.add(new Cow(i, C_s+1, pasture[i][C_s+1]));
+          cowHerd.add(new Cow(i, C_s+2, pasture[i][C_s+2]));
         }
       }
+      Collections.sort(cowHerd);
     }
+
     private class Cow implements Comparable<Cow>{
       public int row, col, elev;
       public Cow(int r, int c, int e){
@@ -68,6 +80,7 @@ public class USACO{
         return elev - other.elev;
       }
     }
+
     public static int silver(String filename){
 	return 0;
     }

@@ -12,29 +12,34 @@ public class USACO{
     public static int bronze(String filename) throws FileNotFoundException{
       File file = new File(filename);
       Scanner input = new Scanner(file);
-      int line = 1;
+      int line = 0;
       int R = 0;
       int C = 0;
       int E = 0;
       int N = 0;
+      int[][] pasture;
       String readLine = "";
       while (input.hasNextLine()){
-          if (line == 0){
           readLine = input.nextLine();
-          //System.out.println(readLine.toCharArray());
           String[] numbers = readLine.split(" ");
-          R = numbers[0];
-          C = numbers[1];
-          E = numbers[2];
-          N = numbers[3];
-          for (int i = 0; i < numbers.length; i++){
-          System.out.println(numbers[i] + ", ");
-          line++;
+          if (line == 0){
+
+          //System.out.println(readLine.toCharArray());
+        //  String[] numbers = readLine.split(" ");
+          R = Integer.parseInt(numbers[0]);
+          C = Integer.parseInt(numbers[1]);
+          E = Integer.parseInt(numbers[2]);
+          N = Integer.parseInt(numbers[3]);
+          System.out.println(R + " " + C+" "+E+ " "+N);
+        }else if (line < R){
+          pasture = new int[R][C];
+          int r = line - 1;
+          for (int i = 0; i < pasture[0].length; i++){
+            pasture[r][i] = Integer.parseInt(numbers[i]);
+            System.out.print(pasture[r][i]+" ");
           }
-
-
-
         }
+        line++;
 
       }
 	return 0;

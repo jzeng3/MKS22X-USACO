@@ -6,10 +6,12 @@ public class USACO{
   private int E;
   private int N;
   private int[][] pasture;
-  private ArrayList<Cow> cowHerd;
+  private int[] cowHerd;
 
   public static void main(String[] args){
     try{
+      Lake test = new Lake("makelake.1.in");
+      test.stomp(1,1,4);
       bronze("makelake.1.in");
     }
     catch (FileNotFoundException e){
@@ -18,12 +20,13 @@ public class USACO{
   }
 
     public static int bronze(String filename) throws FileNotFoundException{
-      public makelake(filename);
-      stomp(1,1,4);
-	return 0;
-    }
 
-    public int makelake(String filename) throws FileNotFoundException{
+	return 0;
+}
+
+    public class Lake{
+
+    public Lake(String filename) throws FileNotFoundException{
       File file = new File(filename);
       Scanner input = new Scanner(file);
       String readLine = "";
@@ -53,33 +56,53 @@ public class USACO{
         line++;
 
       }
-      return 0;
+
     }
 
     public void stomp(int R_s, int C_s, int D_s){
-      cowHerd = new ArrayList<Cow>();
-
+      cowHerd = new int[9];
+      int index = 0;
       if (1 <= R_s && R_s <= R-2 && 1 <= C_s && C_s <= C-2){
+        // add the 9 elevations to an array
         for (int i = R_s; i < R_s+2; i++){
-          cowHerd.add(new Cow(i, C_s, pasture[i][C_s]));
+          cowHerd[index] = pasture[i][C_s];
+          cowHerd[index+1] = pasture[i][C_s +1];
+          cowHerd[index+2] = pasture[i][C_s +2];
+          index += 3;
+        /*  cowHerd.add(new Cow(i, C_s, pasture[i][C_s]));
           cowHerd.add(new Cow(i, C_s+1, pasture[i][C_s+1]));
-          cowHerd.add(new Cow(i, C_s+2, pasture[i][C_s+2]));
+          cowHerd.add(new Cow(i, C_s+2, pasture[i][C_s+2]));*/
+
+        }
+        Arrays.sort(cowHerd);
+        int highestElev = cowHerd[8];
+        int diff = 0;
+        // update the pasture levels
+        for (int i = R_s; i < R_s+2; i++){
+          diff = highestElev - pasture[i][C_s];
+          if (diff <= D_s){
+            pasture[i][C_s] -= (D_s - diff);
+          }
+          diff = highestElev - pasture[i][C_s+1];
+          if (diff <= D_s){
+            pasture[i][C_s+1] -= (D_s - diff);
+          }
+          diff = highestElev - pasture[i][C_s+2];
+          if (diff <= D_s){
+            pasture[i][C_s+2] -= (D_s - diff);
+          }
+
+        /*  cowHerd.add(new Cow(i, C_s, pasture[i][C_s]));
+          cowHerd.add(new Cow(i, C_s+1, pasture[i][C_s+1]));
+          cowHerd.add(new Cow(i, C_s+2, pasture[i][C_s+2]));*/
+
         }
       }
-      Collections.sort(cowHerd);
-    }
 
-    private class Cow implements Comparable<Cow>{
-      public int row, col, elev;
-      public Cow(int r, int c, int e){
-        row = r;
-        col = c;
-        elev = e;
-      }
-      public int compareTo(Cow other){
-        return elev - other.elev;
-      }
     }
+  }
+
+
 
     public static int silver(String filename){
 	return 0;

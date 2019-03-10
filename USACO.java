@@ -6,11 +6,15 @@ public class USACO{
     // try every test case, catch if file is invalid
     try{
       System.out.println(bronze("testCases/makelake.1.in"));
-    /*  System.out.println(bronze("testCases/makelake.2.in"));
+      System.out.println(bronze("testCases/makelake.2.in"));
       System.out.println(bronze("testCases/makelake.3.in"));
       System.out.println(bronze("testCases/makelake.4.in"));
-      System.out.println(bronze("testCases/makelake.5.in"));*/
+      System.out.println(bronze("testCases/makelake.5.in"));
       System.out.println(silver("testCases/ctravel.1.in"));
+      System.out.println(silver("testCases/ctravel.2.in"));
+      System.out.println(silver("testCases/ctravel.3.in"));
+      System.out.println(silver("testCases/ctravel.4.in"));
+      System.out.println(silver("testCases/ctravel.5.in"));
     //  System.out.println(silver("ctravel.0.in"));
     }
     catch (FileNotFoundException e){
@@ -25,10 +29,10 @@ public class USACO{
   }
 
   public static int silver(String filename) throws FileNotFoundException{
+    // instantiate paths pasture and return number of solutions
     Path test = new Path(filename);
-    System.out.println(test);
-    System.out.println(test.toStringPaths());
-    return test.generateMoves();
+    int paths = test.generatePaths();
+    return paths;
   }
 }
 class Path{
@@ -39,8 +43,8 @@ class Path{
   private int C1;
   private int R2;
   private int C2;
-  private char[][] pasture;
-  private int[][] paths;
+  private char[][] pasture; // given pasture, with trees
+  private int[][] paths; // array of possible solutions from each given square
 
   public Path(String filename) throws FileNotFoundException{
     // read input file
@@ -69,10 +73,10 @@ class Path{
           pasture[r][i] = readLine.charAt(i);
         }
       }
-      // When reading the instructions
+      // When reading the start and end coordinates
       else if (line > N){
         String[] numberStr = readLine.split(" ");
-        // call herd to stomp where specified
+        // store start and end coordinates
         R1 = Integer.parseInt(numberStr[0]);
         C1 = Integer.parseInt(numberStr[1]);
         R2 = Integer.parseInt(numberStr[2]);
@@ -94,6 +98,8 @@ class Path{
     }
     return pastureStr;
   }
+
+  // print out array of possible paths
   public String toStringPaths(){
     String pathStr = "";
     for (int r = 0; r < N; r++){
@@ -107,17 +113,27 @@ class Path{
     return pathStr;
   }
 
-  public int generateMoves(){
+  // generate array of possible paths from each given square
+  public int generatePaths(){
+    // array row, column equivalents of given rows and columns
     int row1 = R1 - 1;
     int col1 = C1 - 1;
     int row2 = R2 - 1;
     int col2 = C2 - 1;
 
+    // base: if 0 moves, the only solution is at the end point
     paths[row2][col2] = 1;
+
+    // for each second / move
     for (int t = 0; t < T; t++){
-    int[][] tempPaths = new int[N][M];
+    int[][] tempPaths = new int[N][M]; // create temporary paths array
+    /* Loop through paths array and update each square in the temporary array with
+       the sum of the horizonally and vertically adjacent values in the paths array,
+       if the current square is open pasture, i.e. no tree.
+    */
     for (int r = 0; r < paths.length; r++){
       for (int c = 0; c < paths[0].length; c++){
+        // Also check if each direction is within bounds of the pasture
         if (r - 1 >= 0 && pasture[r-1][c] == '.'){
           tempPaths[r][c] += paths[r-1][c];
         }
@@ -132,10 +148,11 @@ class Path{
         }
       }
     }
+    // Set paths array as the temporary paths array
     paths = tempPaths;
-    System.out.println(toStringPaths());
+
   }
-  System.out.println("row1, col1, path: "+row1+", "+col1+": "+paths[row1][col1]);
+  // Return the number of possible solutions from starting square
   return paths[row1][col1];
   }
 

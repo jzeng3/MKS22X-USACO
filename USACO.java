@@ -38,6 +38,7 @@ class Path{
   private int R2;
   private int C2;
   private char[][] pasture;
+  private int[][] paths;
 
   public Path(String filename) throws FileNotFoundException{
     // read input file
@@ -56,6 +57,7 @@ class Path{
         M = Integer.parseInt(numberStr[1]);
         T = Integer.parseInt(numberStr[2]);
         pasture = new char[N][M];
+        paths = new int[N][M];
       }
       // When reading the lines with the pasture
       else if (line <= N){
@@ -77,6 +79,7 @@ class Path{
       line++;
   }
 }
+  // print out the pasture
   public String toString(){
     String pastureStr = "";
     for (int r = 0; r < N; r++){
@@ -88,6 +91,34 @@ class Path{
       }
     }
     return pastureStr;
+  }
+  public void generateMoves(){
+    for (int r = 0; r < paths.length; r++){
+      for (int c = 0; c < paths[0].length; c++){
+
+        paths[r][c] = 0;
+        // Base casE: 0 moves from one point to same point
+        if (T == 0){
+          if (R1 == R2 && C1 == C2){
+            paths[R1][C1] = 1;
+          }
+        }
+
+        if (T == 1){
+          if ( (r == R2 && c == C2 + 1)
+            || (r == R2 && c == C2 - 1)
+            || (r == R2 + 1 && c == C2)
+            || (r == R2 - 1 && c == C2) ){
+              paths[r][c] = 1;
+            }
+        }
+
+        if (T == 2){
+          
+        }
+
+      }
+    }
   }
 
 }

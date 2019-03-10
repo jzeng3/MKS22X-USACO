@@ -6,10 +6,11 @@ public class USACO{
     // try every test case, catch if file is invalid
     try{
       System.out.println(bronze("testCases/makelake.1.in"));
-      System.out.println(bronze("testCases/makelake.2.in"));
+    /*  System.out.println(bronze("testCases/makelake.2.in"));
       System.out.println(bronze("testCases/makelake.3.in"));
       System.out.println(bronze("testCases/makelake.4.in"));
-      System.out.println(bronze("testCases/makelake.5.in"));
+      System.out.println(bronze("testCases/makelake.5.in"));*/
+      System.out.println(silver("testCases/ctravel.1.in"));
     }
     catch (FileNotFoundException e){
       System.out.println("File not found");
@@ -22,7 +23,9 @@ public class USACO{
     return test.volume();
   }
 
-  public static int silver(String filename){
+  public static int silver(String filename) throws FileNotFoundException{
+    Path test = new Path(filename);
+    System.out.println(test);
     return 0;
   }
 }
@@ -59,7 +62,7 @@ class Path{
         // update current  pasture row
         int r = line - 1;
         for (int i = 0; i < pasture[0].length; i++){
-          pasture[r][i] = line.charAt(i);
+          pasture[r][i] = readLine.charAt(i);
         }
       }
       // When reading the instructions
@@ -74,6 +77,21 @@ class Path{
       line++;
   }
 }
+  public String toString(){
+    String pastureStr = "";
+    for (int r = 0; r < N; r++){
+      for (int c = 0; c < M; c++){
+        pastureStr += pasture[r][c]+" ";
+        if (c == M -1){
+          pastureStr += "\n";
+        }
+      }
+    }
+    return pastureStr;
+  }
+
+}
+
 class Lake{
 
   private int R;

@@ -11,6 +11,7 @@ public class USACO{
       System.out.println(bronze("testCases/makelake.4.in"));
       System.out.println(bronze("testCases/makelake.5.in"));*/
       System.out.println(silver("testCases/ctravel.1.in"));
+      System.out.println(silver("ctravel.0.in"));
     }
     catch (FileNotFoundException e){
       System.out.println("File not found");
@@ -26,6 +27,8 @@ public class USACO{
   public static int silver(String filename) throws FileNotFoundException{
     Path test = new Path(filename);
     System.out.println(test);
+    test.generateMoves();
+    System.out.println(test.toStringPaths());
     return 0;
   }
 }
@@ -71,10 +74,10 @@ class Path{
       else if (line > N){
         String[] numberStr = readLine.split(" ");
         // call herd to stomp where specified
-        int R1 = Integer.parseInt(numberStr[0]);
-        int C1 = Integer.parseInt(numberStr[1]);
-        int R2 = Integer.parseInt(numberStr[2]);
-        int C2 = Integer.parseInt(numberStr[3]);
+        R1 = Integer.parseInt(numberStr[0]);
+        C1 = Integer.parseInt(numberStr[1]);
+        R2 = Integer.parseInt(numberStr[2]);
+        C2 = Integer.parseInt(numberStr[3]);
       }
       line++;
   }
@@ -92,33 +95,47 @@ class Path{
     }
     return pastureStr;
   }
-  public void generateMoves(){
-    for (int r = 0; r < paths.length; r++){
-      for (int c = 0; c < paths[0].length; c++){
-
-        paths[r][c] = 0;
-        // Base casE: 0 moves from one point to same point
-        if (T == 0){
-          if (R1 == R2 && C1 == C2){
-            paths[R1][C1] = 1;
-          }
+  public String toStringPaths(){
+    String pathStr = "";
+    for (int r = 0; r < N; r++){
+      for (int c = 0; c < M; c++){
+        pathStr += paths[r][c]+" ";
+        if (c == M -1){
+          pathStr += "\n";
         }
-
-        if (T == 1){
-          if ( (r == R2 && c == C2 + 1)
-            || (r == R2 && c == C2 - 1)
-            || (r == R2 + 1 && c == C2)
-            || (r == R2 - 1 && c == C2) ){
-              paths[r][c] = 1;
-            }
-        }
-
-        if (T == 2){
-          
-        }
-
       }
     }
+    return pathStr;
+  }
+
+  public void generateMoves(){
+    int row1 = R1 - 1;
+    int col1 = C1 - 1;
+    int row2 = R2 - 1;
+    int col2 = C2 - 1;
+
+    paths[row1][col1] = 1;
+    for (int t = 0; t < T; t++){
+      int[][] tempPaths = new int[N][M];
+    for (int r = 0; r < paths.length; r++){
+      for (int c = 0; c < paths[0].length; c++){
+        if (r - 1 >= 0){
+          tempPaths[r][c] += paths[r-1][c];
+        }
+        if (r + 1 < paths.length){
+          tempPaths[r][c] += paths[r+1][c];
+        }
+        if (c - 1 >= 0){
+          tempPaths[r][c] += paths[r][c-1];
+        }
+        if (c + 1 < paths[0].length){
+          tempPaths[r][c] += paths[r][c+1];
+        }
+      }
+    }
+    paths = tempPaths;
+    System.out.println(toStringPaths());
+  }
   }
 
 }

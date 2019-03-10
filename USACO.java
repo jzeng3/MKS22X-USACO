@@ -26,7 +26,54 @@ public class USACO{
     return 0;
   }
 }
+class Path{
+  private int N;
+  private int M;
+  private int T;
+  private int R1;
+  private int C1;
+  private int R2;
+  private int C2;
+  private char[][] pasture;
 
+  public Path(String filename) throws FileNotFoundException{
+    // read input file
+    File file = new File(filename);
+    Scanner input = new Scanner(file);
+    String readLine = "";
+    int line = 0;
+    while (input.hasNextLine()){
+      readLine = input.nextLine();
+      /* Read the first line of information for
+      number of rows, columns, final elevation, and number of instructions*/
+      if (line == 0){
+        // separate the line into String array of the "numberStr" to be used
+        String[] numberStr = readLine.split(" ");
+        N = Integer.parseInt(numberStr[0]);
+        M = Integer.parseInt(numberStr[1]);
+        T = Integer.parseInt(numberStr[2]);
+        pasture = new char[N][M];
+      }
+      // When reading the lines with the pasture
+      else if (line <= N){
+        // update current  pasture row
+        int r = line - 1;
+        for (int i = 0; i < pasture[0].length; i++){
+          pasture[r][i] = line.charAt(i);
+        }
+      }
+      // When reading the instructions
+      else if (line > N){
+        String[] numberStr = readLine.split(" ");
+        // call herd to stomp where specified
+        int R1 = Integer.parseInt(numberStr[0]);
+        int C1 = Integer.parseInt(numberStr[1]);
+        int R2 = Integer.parseInt(numberStr[2]);
+        int C2 = Integer.parseInt(numberStr[3]);
+      }
+      line++;
+  }
+}
 class Lake{
 
   private int R;
@@ -93,10 +140,12 @@ class Lake{
     }
     return pastureStr;
   }
+
   // stomp on a 9-square space on the pasture given specified row, column, and depth to stomp down
   public void stomp(int R_s, int C_s, int D_s){
     cowHerd = new int[9];
     int index = 0;
+    // Check if cow herd can fit on the given area
     if (1 <= R_s && R_s <= R-2 && 1 <= C_s && C_s <= C-2){
       // add the 9 elevations to an array
       for (int i = R_s-1; i < R_s+2; i++){

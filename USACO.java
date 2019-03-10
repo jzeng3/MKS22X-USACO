@@ -11,7 +11,7 @@ public class USACO{
       System.out.println(bronze("testCases/makelake.4.in"));
       System.out.println(bronze("testCases/makelake.5.in"));*/
       System.out.println(silver("testCases/ctravel.1.in"));
-      System.out.println(silver("ctravel.0.in"));
+    //  System.out.println(silver("ctravel.0.in"));
     }
     catch (FileNotFoundException e){
       System.out.println("File not found");
@@ -27,9 +27,8 @@ public class USACO{
   public static int silver(String filename) throws FileNotFoundException{
     Path test = new Path(filename);
     System.out.println(test);
-    test.generateMoves();
     System.out.println(test.toStringPaths());
-    return 0;
+    return test.generateMoves();
   }
 }
 class Path{
@@ -108,27 +107,27 @@ class Path{
     return pathStr;
   }
 
-  public void generateMoves(){
+  public int generateMoves(){
     int row1 = R1 - 1;
     int col1 = C1 - 1;
     int row2 = R2 - 1;
     int col2 = C2 - 1;
 
-    paths[row1][col1] = 1;
+    paths[row2][col2] = 1;
     for (int t = 0; t < T; t++){
-      int[][] tempPaths = new int[N][M];
+    int[][] tempPaths = new int[N][M];
     for (int r = 0; r < paths.length; r++){
       for (int c = 0; c < paths[0].length; c++){
-        if (r - 1 >= 0){
+        if (r - 1 >= 0 && pasture[r-1][c] == '.'){
           tempPaths[r][c] += paths[r-1][c];
         }
-        if (r + 1 < paths.length){
+        if (r + 1 < paths.length && pasture[r+1][c] == '.'){
           tempPaths[r][c] += paths[r+1][c];
         }
-        if (c - 1 >= 0){
+        if (c - 1 >= 0 && pasture[r][c-1] == '.'){
           tempPaths[r][c] += paths[r][c-1];
         }
-        if (c + 1 < paths[0].length){
+        if (c + 1 < paths[0].length && pasture[r][c+1] == '.'){
           tempPaths[r][c] += paths[r][c+1];
         }
       }
@@ -136,6 +135,8 @@ class Path{
     paths = tempPaths;
     System.out.println(toStringPaths());
   }
+  System.out.println("row1, col1, path: "+row1+", "+col1+": "+paths[row1][col1]);
+  return paths[row1][col1];
   }
 
 }
